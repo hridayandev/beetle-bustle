@@ -3,322 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Beetle Bustle Arcade</title>
+    <title>Beetle Bustle — Game Introduction</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             background: #051014;
-            color: #ffffff;
+            color: #E0F2F1;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
         }
-        header {
+        /* Cosmic ambient background */
+        .ambient-glow {
+            position: fixed;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(68, 196, 164, 0.22) 0%, rgba(5, 16, 20, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .ambient-glow-bottom {
+            position: fixed;
+            bottom: -15%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79, 163, 227, 0.15) 0%, rgba(5, 16, 20, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
             width: 100%;
-            padding: 16px 20px;
+            max-width: 440px;
+            padding: 28px 20px 40px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            background: linear-gradient(180deg, rgba(8, 26, 33, 0.85) 0%, rgba(5, 16, 20, 0) 100%);
-            z-index: 10;
+            position: relative;
+            z-index: 1;
         }
-        .title-badge {
+        /* Logo and Badge */
+        .badge-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .hero-orb {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #7EF1D6 25%, #44C4A4 60%, #0D5C4A 100%);
+            box-shadow: 0 0 28px rgba(68, 196, 164, 0.55), inset 0 2px 6px rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+        .hero-saucer {
+            width: 110px;
+            height: 24px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #5DE0BF 0%, #2D9378 50%, #0F4436 100%);
+            box-shadow: 0 4px 16px rgba(68, 196, 164, 0.4);
+            margin-top: -12px;
+            border: 1.5px solid #A8FFE6;
+            position: relative;
+        }
+        .hero-saucer::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 20%;
+            width: 60%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 24px rgba(68, 196, 164, 0.45); }
+            50% { transform: scale(1.04); box-shadow: 0 0 36px rgba(68, 196, 164, 0.75); }
+        }
+        /* Titles */
+        h1 {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            color: #FFFFFF;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 2px 14px rgba(68, 196, 164, 0.6);
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 13px;
+            font-weight: 600;
+            color: #44C4A4;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        /* Overview Card */
+        .glass-card {
+            width: 100%;
+            background: rgba(8, 26, 33, 0.75);
+            border: 1px solid rgba(68, 196, 164, 0.28);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            margin-bottom: 20px;
+        }
+        .glass-card h2 {
+            font-size: 14px;
+            font-weight: 800;
+            color: #A8FFE6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .orb-icon {
-            width: 24px;
-            height: 24px;
+        .glass-card h2::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #44C4A4 60%, #0D5C4A 100%);
-            box-shadow: 0 0 12px #44C4A4;
+            background: #44C4A4;
+            box-shadow: 0 0 8px #44C4A4;
         }
-        .title-text {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            color: #44C4A4;
-            text-shadow: 0 0 10px rgba(68, 196, 164, 0.5);
+        .intro-text {
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #B2D8D8;
         }
-        .stats-bar {
-            display: flex;
-            gap: 16px;
-        }
-        .stat-item {
+        /* How to Play Grid */
+        .steps-list {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-        }
-        .stat-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #7A9E9F;
-        }
-        .stat-value {
-            font-size: 18px;
-            font-weight: 800;
-            color: #ffffff;
-        }
-        #gameCanvas {
+            gap: 12px;
             width: 100%;
-            flex-grow: 1;
-            display: block;
-            touch-action: none;
+            margin-bottom: 20px;
         }
-        footer {
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: rgba(13, 34, 41, 0.65);
+            border: 1px solid rgba(68, 196, 164, 0.18);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #44C4A4 0%, #1A705B 100%);
+            color: #051014;
+            font-weight: 900;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(68, 196, 164, 0.4);
+        }
+        .step-content h3 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 3px;
+        }
+        .step-content p {
+            font-size: 12px;
+            color: #92B7B8;
+            line-height: 1.45;
+        }
+        /* Feature Highlights */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
             width: 100%;
+            margin-bottom: 24px;
+        }
+        .feature-box {
+            background: rgba(8, 26, 33, 0.55);
+            border: 1px solid rgba(68, 196, 164, 0.15);
+            border-radius: 12px;
             padding: 12px;
             text-align: center;
+        }
+        .feature-box .feat-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .feature-box .feat-title {
             font-size: 12px;
-            color: #4B6E70;
-            background: linear-gradient(0deg, rgba(8, 26, 33, 0.9) 0%, rgba(5, 16, 20, 0) 100%);
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 2px;
+        }
+        .feature-box .feat-desc {
+            font-size: 10.5px;
+            color: #7A9E9F;
+        }
+        /* Launching Footer */
+        .loading-banner {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, rgba(68, 196, 164, 0.12) 0%, rgba(68, 196, 164, 0.25) 50%, rgba(68, 196, 164, 0.12) 100%);
+            border: 1px solid rgba(68, 196, 164, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(68, 196, 164, 0.3);
+            border-top-color: #44C4A4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #A8FFE6;
             letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="title-badge">
-            <div class="orb-icon"></div>
-            <div class="title-text">BEETLE BUSTLE</div>
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow-bottom"></div>
+
+    <div class="container">
+        <!-- Hero Graphic -->
+        <div class="badge-wrapper">
+            <div class="hero-orb"></div>
+            <div class="hero-saucer"></div>
         </div>
-        <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-label">Score</span>
-                <span id="scoreVal" class="stat-value">0</span>
+
+        <!-- Title Header -->
+        <h1>Beetle Bustle</h1>
+        <div class="subtitle">Arcade Reflex Challenge</div>
+
+        <!-- Game Story / Overview -->
+        <div class="glass-card">
+            <h2>About The Game</h2>
+            <p class="intro-text">
+                Welcome to <strong>Beetle Bustle</strong>! Step into the cosmic arena where speed and precision collide. Pilot your energy catcher to capture high-velocity orbs, navigate changing gravity streams, and climb the galactic high scores.
+            </p>
+        </div>
+
+        <!-- How to Play Steps -->
+        <div class="steps-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Position Your Catcher</h3>
+                    <p>Slide your saucer across the bottom edge to track and intercept falling cosmic orbs.</p>
+                </div>
             </div>
-            <div class="stat-item">
-                <span class="stat-label">Best</span>
-                <span id="bestVal" class="stat-value">0</span>
+
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Collect High-Value Orbs</h3>
+                    <p>Catch rare golden and ruby orbs for score bonuses and energy multiplier boosts.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Master Every Level</h3>
+                    <p>Clear challenging stages, maintain combos, and unlock new customizations in the shop.</p>
+                </div>
             </div>
         </div>
-    </header>
 
-    <canvas id="gameCanvas"></canvas>
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feat-icon">⚡</div>
+                <div class="feat-title">60 FPS Motion</div>
+                <div class="feat-desc">Smooth responsive touch</div>
+            </div>
+            <div class="feature-box">
+                <div class="feat-icon">🏆</div>
+                <div class="feat-title">High Scores</div>
+                <div class="feat-desc">Local records & ranks</div>
+            </div>
+            <div class="feature-box">
+                <div class="feat-icon">🎨</div>
+                <div class="feat-title">Shop Customization</div>
+                <div class="feat-desc">Saucer skins & trails</div>
+            </div>
+            <div class="feature-box">
+                <div class="feat-icon">🔊</div>
+                <div class="feat-title">Arcade Audio</div>
+                <div class="feat-desc">Haptics & sfx immersion</div>
+            </div>
+        </div>
 
-    <footer>
-        Drag paddle to catch falling glowing orbs
-    </footer>
-
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreVal = document.getElementById('scoreVal');
-        const bestVal = document.getElementById('bestVal');
-
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = canvas.clientHeight || (window.innerHeight - 100);
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = canvas.clientHeight || (window.innerHeight - 100);
-        });
-
-        let score = 0;
-        let best = localStorage.getItem('bb_best') || 0;
-        bestVal.innerText = best;
-
-        const paddle = {
-            width: 90,
-            height: 18,
-            x: width / 2 - 45,
-            y: height - 40,
-            targetX: width / 2 - 45
-        };
-
-        const orbs = [];
-        const particles = [];
-        const colors = [
-            { main: '#44C4A4', light: '#E0FFF7', shadow: 'rgba(68,196,164,0.6)', pts: 10 },
-            { main: '#FFD15C', light: '#FFF6D6', shadow: 'rgba(255,209,92,0.6)', pts: 25 },
-            { main: '#4FA3E3', light: '#E3F2FD', shadow: 'rgba(79,163,227,0.6)', pts: 15 },
-            { main: '#E4648C', light: '#FFE4EC', shadow: 'rgba(228,100,140,0.6)', pts: 50 }
-        ];
-
-        function spawnOrb() {
-            const col = colors[Math.floor(Math.random() * colors.length)];
-            orbs.push({
-                x: 30 + Math.random() * (width - 60),
-                y: -20,
-                radius: 12 + Math.random() * 4,
-                speed: 2.2 + Math.random() * 2.5,
-                color: col
-            });
-        }
-
-        let spawnTimer = 0;
-
-        function addParticles(x, y, color) {
-            for (let i = 0; i < 14; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const spd = 1.5 + Math.random() * 4;
-                particles.push({
-                    x: x,
-                    y: y,
-                    vx: Math.cos(angle) * spd,
-                    vy: Math.sin(angle) * spd,
-                    radius: 2 + Math.random() * 2.5,
-                    alpha: 1,
-                    color: color
-                });
-            }
-        }
-
-        function handleMove(clientX) {
-            paddle.targetX = clientX - paddle.width / 2;
-            if (paddle.targetX < 10) paddle.targetX = 10;
-            if (paddle.targetX > width - paddle.width - 10) paddle.targetX = width - paddle.width - 10;
-        }
-
-        canvas.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) handleMove(e.touches[0].clientX);
-        }, { passive: true });
-
-        canvas.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 0) handleMove(e.touches[0].clientX);
-        }, { passive: true });
-
-        canvas.addEventListener('mousemove', (e) => {
-            handleMove(e.clientX);
-        });
-
-        function update() {
-            paddle.x += (paddle.targetX - paddle.x) * 0.25;
-            paddle.y = height - 40;
-
-            spawnTimer++;
-            if (spawnTimer > 40) {
-                spawnOrb();
-                spawnTimer = 0;
-            }
-
-            for (let i = orbs.length - 1; i >= 0; i--) {
-                const o = orbs[i];
-                o.y += o.speed;
-
-                if (o.y + o.radius >= paddle.y && 
-                    o.y - o.radius <= paddle.y + paddle.height &&
-                    o.x >= paddle.x - 8 && 
-                    o.x <= paddle.x + paddle.width + 8) {
-                    
-                    score += o.color.pts;
-                    scoreVal.innerText = score;
-                    if (score > best) {
-                        best = score;
-                        bestVal.innerText = best;
-                        localStorage.setItem('bb_best', best);
-                    }
-                    addParticles(o.x, o.y, o.color.main);
-                    orbs.splice(i, 1);
-                    continue;
-                }
-
-                if (o.y > height + 25) {
-                    orbs.splice(i, 1);
-                }
-            }
-
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.alpha -= 0.035;
-                if (p.alpha <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, width, height);
-
-            ctx.fillStyle = '#06161C';
-            ctx.strokeStyle = '#0F303B';
-            ctx.lineWidth = 1;
-            const gridSpacing = 40;
-            for (let x = 0; x < width; x += gridSpacing) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-
-            // Draw paddle (saucer)
-            ctx.save();
-            ctx.shadowColor = '#44C4A4';
-            ctx.shadowBlur = 12;
-            const grad = ctx.createLinearGradient(paddle.x, paddle.y, paddle.x, paddle.y + paddle.height);
-            grad.addColorStop(0, '#5DE0BF');
-            grad.addColorStop(0.5, '#2D9378');
-            grad.addColorStop(1, '#0F4436');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 9);
-            ctx.fill();
-
-            ctx.strokeStyle = '#A8FFE6';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            // Specular highlight
-            ctx.fillStyle = 'rgba(255,255,255,0.45)';
-            ctx.beginPath();
-            ctx.ellipse(paddle.x + paddle.width / 2, paddle.y + 4, paddle.width * 0.35, 2.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-            // Draw orbs
-            for (const o of orbs) {
-                ctx.save();
-                ctx.shadowColor = o.color.shadow;
-                ctx.shadowBlur = 16;
-                const orbGrad = ctx.createRadialGradient(
-                    o.x - o.radius * 0.3, o.y - o.radius * 0.3, o.radius * 0.1,
-                    o.x, o.y, o.radius
-                );
-                orbGrad.addColorStop(0, '#ffffff');
-                orbGrad.addColorStop(0.4, o.color.light);
-                orbGrad.addColorStop(0.8, o.color.main);
-                orbGrad.addColorStop(1, '#051014');
-                ctx.fillStyle = orbGrad;
-                ctx.beginPath();
-                ctx.arc(o.x, o.y, o.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-
-            // Draw particles
-            for (const p of particles) {
-                ctx.save();
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        function loop() {
-            update();
-            draw();
-            requestAnimationFrame(loop);
-        }
-
-        loop();
-    </script>
+        <!-- Auto-launch notice -->
+        <div class="loading-banner">
+            <div class="spinner"></div>
+            <div class="loading-text">Starting Native Game Session...</div>
+        </div>
+    </div>
 </body>
 </html>
